@@ -7,6 +7,7 @@ import random
 words = ["able", "about", "account", "acid", "across", "act", "addition", "adjustment", "advertisement", "after", "again", "against", "agreement", "air", "all", "almost", "among",
           "amount", "amusement", "and"]
 
+
 def main():
     print("====================================")
     print("   WELCOME TO THE CLI HANGMAN GAME  ")
@@ -30,6 +31,15 @@ def main():
     mistake_counter = 0
     while True:
         user_guess = input("Please guess a letter: ").strip().lower()
+
+        if not user_guess.isalpha():
+            print("Please enter only letters from the english alphabet")
+            continue
+
+        if len(user_guess) > 1:
+            print("Please enter only one letter at a time")
+            continue
+        
         if user_guess in letter_list:
             if user_guess not in correct_choices:
                 print("Great guess! You are one step closer")
@@ -54,12 +64,19 @@ def main():
                 current_guess.append("_")
         print(" ")
         print(f"The current guess is: {current_guess}")
+        print(f"mistakes: {mistake_counter}")
 
         if current_guess == letter_list:
             print("==========================================")
             print("CONGRATULATIONS! YOU HAVE GUESSED THE WORD")
             print("==========================================")
-            return
+            break
+
+        if mistake_counter == 6:
+            print("====================================")
+            print("CONGDOLENCES! YOU HAVE LOST THE GAME")
+            print("====================================")
+            break
 
 
 
