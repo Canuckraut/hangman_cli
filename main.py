@@ -1,7 +1,7 @@
 import os
 import sys
 import random
-
+from ascii_art import hangman_title, noose_art
 
 
 words = ["able", "about", "account", "acid", "across", "act", "addition", "adjustment", "advertisement", "after", "again", "against", "agreement", "air", "all", "almost", "among",
@@ -9,19 +9,8 @@ words = ["able", "about", "account", "acid", "across", "act", "addition", "adjus
 
 
 def main():
-    print("====================================")
-    print("   WELCOME TO THE CLI HANGMAN GAME  ")
-    print("====================================")
-    print("Initializing engine setup...")
+    print(hangman_title)
     
-    # Just a simple sanity check input to prove the terminal loop handles pause/input
-    #user_ready = input("Are you ready to play? (y/n): ").strip().lower()
-    
-    #if user_ready == 'y':
-    #    print("Framework loaded successfully. Ready for Phase 1 logic!")
-    #else:
-    #    print("Exiting framework check.")
-    #    sys.exit(0)
     random_word = random.choice(words)
     print(random_word)
     letter_list = list(random_word)
@@ -39,7 +28,7 @@ def main():
         if len(user_guess) > 1:
             print("Please enter only one letter at a time")
             continue
-        
+
         if user_guess in letter_list:
             if user_guess not in correct_choices:
                 print("Great guess! You are one step closer")
@@ -57,14 +46,14 @@ def main():
         current_guess = []
         for letter in letter_list:
             if letter in correct_choices:
-                print(letter, end = " ")
+                print(letter + " ", end = " ")
                 current_guess.append(letter)
             else:
-                print("_", end = " ")
+                print("_" + " ", end = " ")
                 current_guess.append("_")
         print(" ")
-        print(f"The current guess is: {current_guess}")
-        print(f"mistakes: {mistake_counter}")
+        print(noose_art[mistake_counter])
+        print("incorrect guesses:", *sorted(incorrect_choices))
 
         if current_guess == letter_list:
             print("==========================================")
@@ -73,8 +62,9 @@ def main():
             break
 
         if mistake_counter == 6:
+            print(f"The secret word was: {random_word}")
             print("====================================")
-            print("CONGDOLENCES! YOU HAVE LOST THE GAME")
+            print("CONDOLENCES! YOU HAVE LOST THE GAME")
             print("====================================")
             break
 
