@@ -1,71 +1,60 @@
 import os
 import sys
 import random
-from ascii_art import hangman_title, noose_art
+from ascii_art import hangman_title, noose_art, hangman_stages
 
 
 words = ["able", "about", "account", "acid", "across", "act", "addition", "adjustment", "advertisement", "after", "again", "against", "agreement", "air", "all", "almost", "among",
           "amount", "amusement", "and"]
-
+ascii_art = hangman_stages
 
 def main():
     print(hangman_title)
     
-    random_word = random.choice(words)
-    letter_list = list(random_word)
+    secret_word = random.choice(words)
     correct_choices = set()
     incorrect_choices = set()
-    mistake_counter = 0
     while True:
+        #print(f"debug mode: {secret_word}")
         user_guess = input("Please guess a letter: ").strip().lower()
+
+        if len(user_guess) != 1:
+            print("Please enter exactly one letter")
+            continue
 
         if not user_guess.isalpha():
             print("Please enter only letters from the english alphabet")
             continue
 
-        if len(user_guess) > 1:
-            print("Please enter only one letter at a time")
+        if user_guess in correct_choices or user_guess in incorrect_choices:
+            print("You already guessed this letter, genius!")
             continue
 
-        if user_guess in letter_list:
-            if user_guess not in correct_choices:
-                print("Great guess! You are one step closer")
-                correct_choices.add(user_guess)
-            else:
-                print("You already guessed this letter genious!")
+        if user_guess in secret_word:
+            print("Great guess! You are one step closer")
+            correct_choices.add(user_guess)
         else:
-            if user_guess not in incorrect_choices:
-                mistake_counter += 1
-                incorrect_choices.add(user_guess)
-                print("Ouch! That was wrong. You are one step closer to death!")
-            else:
-                print("You already made this mistake before dummy!")
+            print("Ouch! That was wrong. You are one step closer to death!")
+            incorrect_choices.add(user_guess)
 
-        current_guess = []
-        for letter in letter_list:
-            if letter in correct_choices:
-                print(letter + " ", end = " ")
-                current_guess.append(letter)
-            else:
-                print("_" + " ", end = " ")
-                current_guess.append("_")
-        print(" ")
-        print(noose_art[mistake_counter])
+        display_word = " ".join([letter if letter in correct_choices else "_" for letter in secret_word])
+        print(display_word)
+        print(ascii_art[len(incorrect_choices)])
         print("incorrect guesses:", *sorted(incorrect_choices))
 
-        if current_guess == letter_list:
+        if set(secret_word) == correct_choices:
             print("==========================================")
-            print("CONGRATULATIONS! YOU HAVE GUESSED THE WORD")
+            print(f"CONGRATULATIONS! YOU HAVE GUESSED THE WORD \nThe secret word was: {secret_word}")
             print("==========================================")
+            input("\nPress Enter to exit...")
             break
 
-        if mistake_counter == 6:
-            print(f"The secret word was: {random_word}")
+        if len(incorrect_choices) == len(ascii_art) -1:
             print("====================================")
-            print("CONDOLENCES! YOU HAVE LOST THE GAME")
+            print(f"CONDOLENCES YOU HAVE LOST THE GAME! \nThe secret word was: {secret_word}")
             print("====================================")
+            input("\nPress Enter to exit...")
             break
-
 
 
 
