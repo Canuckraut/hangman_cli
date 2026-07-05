@@ -12,9 +12,7 @@ def main():
     print(hangman_title)
     
     random_word = random.choice(words)
-    print(random_word)
     letter_list = list(random_word)
-    print(letter_list)
     correct_choices = set()
     incorrect_choices = set()
     mistake_counter = 0
